@@ -46,3 +46,4 @@ from google.colab import auth
 import gspread
 from oauth2client.client import GoogleCredentials
 
+# @ㄴㅁㄻㄻ
