@@ -119,7 +119,7 @@ def mark_genres(movies, genres):
       return 'Other'
     return '-'.join(active)
   movies['genre'] = [                                                             # movies['genre'] = 해당 영화의 장르값
-      get_random_genre(gs) for gs in zip(*[movies[genre] for genre in genres])] 
+      get_random_genre(gs) for gs in zip(*[movies[genre] for genre in genres])]   # * means unpack the lists
   movies['all_genres'] = [
       get_all_genres(gs) for gs in zip(*[movies[genre] for genre in genres])]
 
