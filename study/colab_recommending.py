@@ -123,5 +123,8 @@ def mark_genres(movies, genres):
   movies['all_genres'] = [
       get_all_genres(gs) for gs in zip(*[movies[genre] for genre in genres])]
 
-mark_genres(movies, genre_cols)
-
+mark_genres(movies, genre_cols)                                                   # 2개의 칼럼 생성 - 랜덤한개장르 & 전체장르장
+ 
+  
+  
+  
