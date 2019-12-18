@@ -46,4 +46,46 @@ from google.colab import auth
 import gspread
 from oauth2client.client import GoogleCredentials
 
-# @ㄴㅁㄻㄻ
+# Download MovieLens data.
+print("Downloading movielens data...")
+from urllib.request import urlretrieve
+import zipfile
+
+urlretrieve("http://files.grouplens.org/datasets/movielens/ml-100k.zip", "movielens.zip")
+zip_ref = zipfile.ZipFile('movielens.zip', "r")
+zip_ref.extractall()
+print("Done. Dataset contains:")
+print(zip_ref.read('ml-100k/u.info'))
+
+# Load each data set (users, movies, and ratings).
+users_cols = ['user_id', 'age', 'sex', 'occupation', 'zip_code']
+users = pd.read_csv(
+    'ml-100k/u.user', sep='|', names=users_cols, encoding='latin-1')
+
+ratings_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
+ratings = pd.read_csv(
+    'ml-100k/u.data', sep='\t', names=ratings_cols, encoding='latin-1')
+
+# The movies file contains a binary feature for each genre.
+genre_cols = [
+    "genre_unknown", "Action", "Adventure", "Animation", "Children", "Comedy",
+    "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
+    "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"
+]
+movies_cols = [
+    'movie_id', 'title', 'release_date', "video_release_date", "imdb_url"
+] + genre_cols
+
+### u.item 파일 내 column은 genre_cols와 같음
+movies = pd.read_csv(
+    'ml-100k/u.item', sep='|', names=movies_cols, encoding='latin-1')
+
+# Since the ids start at 1, we shift them to start at 0.
+users["user_id"] = users["user_id"].apply(lambda x: str(x-1))
+movies["movie_id"] = movies["movie_id"].apply(lambda x: str(x-1))
+movies["year"] = movies['release_date'].apply(lambda x: str(x).split('-')[-1]) # 마지막 항이 연도를 나타내므로 -1
+ratings["movie_id"] = ratings["movie_id"].apply(lambda x: str(x-1))
+ratings["user_id"] = ratings["user_id"].apply(lambda x: str(x-1))
+ratings["rating"] = ratings["rating"].apply(lambda x: float(x))
+
+
