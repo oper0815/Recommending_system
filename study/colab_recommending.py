@@ -88,4 +88,40 @@ ratings["movie_id"] = ratings["movie_id"].apply(lambda x: str(x-1))
 ratings["user_id"] = ratings["user_id"].apply(lambda x: str(x-1))
 ratings["rating"] = ratings["rating"].apply(lambda x: float(x))
 
+# Compute the number of movies to which a genre is assigned.
+### 장르부분만 추출
+'''
+[sum 처리 후 장르 합]
+genre_unknown      2
+Action           251
+Adventure        135
+Animation         42
+[dict 후 딕셔너리 형]
+'Action': 251,
+ 'Adventure': 135,
+ 'Animation': 42,
+'''
+genre_occurences = movies[genre_cols].sum().to_dict()
+
+# Since some movies can belong to more than one genre, we create different
+# 'genre' columns as follows:
+# - all_genres: all the active genres of the movie.
+# - genre: randomly sampled from the active genres.
+def mark_genres(movies, genres):
+  def get_random_genre(gs):
+    active = [genre for genre, g in zip(genres, gs) if g==1] # zip:genres, gs 데이터 내 묶기
+    if len(active) == 0:
+      return 'Other'
+    return np.random.choice(active)
+  def get_all_genres(gs):
+    active = [genre for genre, g in zip(genres, gs) if g==1]
+    if len(active) == 0:
+      return 'Other'
+    return '-'.join(active)
+  movies['genre'] = [
+      get_random_genre(gs) for gs in zip(*[movies[genre] for genre in genres])]
+  movies['all_genres'] = [
+      get_all_genres(gs) for gs in zip(*[movies[genre] for genre in genres])]
+
+mark_genres(movies, genre_cols)
 
