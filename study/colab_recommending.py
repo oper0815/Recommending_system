@@ -125,6 +125,12 @@ def mark_genres(movies, genres):
 
 mark_genres(movies, genre_cols)                                                   # 2개의 칼럼 생성 - 랜덤한개장르 & 전체장르장
  
-  
-  
-  
+movielens = ratings.merge(movies, on='movie_id').merge(users, on='user_id')  
+'''  result of movielens
+	user_id	movie_id	rating	unix_timestamp	title	release_date	video_release_date	imdb_url	genre_unknown	Action	Adventure	Animation	Children	Comedy	Crime	Documentary	Drama	Fantasy	Film-Noir	Horror	Musical	Mystery	Romance	Sci-Fi	Thriller	War	Western	year	genre	all_genres	age	sex	occupation	zip_code
+0	195	241	3.000	881250949	Kolya (1996)	24-Jan-1997	nan	http://us.imdb.com/M/title-exact?Kolya%20(1996)	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1997	Comedy	Comedy	49	M	writer	55105
+1	195	256	2.000	881251577	Men in Black (1997)	04-Jul-1997	nan	http://us.imdb.com/M/title-exact?Men+in+Black+...	0	1	1	0	0	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1997	Action	Action-Adventure-Comedy-Sci-Fi	49	M	writer	55105
+2	195	110	4.000	881251793	Truth About Cats & Dogs, The (1996)	26-Apr-1996	nan	http://us.imdb.com/M/title-exact?Truth%20About...	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	1996	Romance	Comedy-Romance	49	M	writer	55105
+'''
+
+
