@@ -148,5 +148,22 @@ def split_dataframe(df, holdout_fraction=0.1):
   train = df[~df.index.isin(test.index)]
   return train, test
 
+### A=UV 꼴로 만들기 sparse matrix
+
+def build_rating_sparse_tensor(ratings_df):
+  """
+  Args:
+    ratings_df: a pd.DataFrame with `user_id`, `movie_id` and `rating` columns.
+  Returns:
+    A tf.SparseTensor representing the ratings matrix.
+  """
+  indices = ratings_df[['user_id', 'movie_id']].values    # [[x,y], [x1,y1]]
+  values = ratings_df['rating'].values                    # rating 값
+
+  return tf.SparseTensor(
+      indices=indices,
+      values=values,
+      dense_shape=[users.shape[0], movies.shape[0]])
+
 
 
