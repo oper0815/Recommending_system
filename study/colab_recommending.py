@@ -149,7 +149,6 @@ def split_dataframe(df, holdout_fraction=0.1):
   return train, test
 
 ### A=UV 꼴로 만들기 sparse matrix
-
 def build_rating_sparse_tensor(ratings_df):
   """
   Args:
@@ -165,5 +164,22 @@ def build_rating_sparse_tensor(ratings_df):
       values=values,
       dense_shape=[users.shape[0], movies.shape[0]])
 
-
+### (A-UV)^2 MSE 구하기
+def sparse_mean_square_error(sparse_ratings, user_embeddings, movie_embeddings):
+  """
+  Args:
+    sparse_ratings: A SparseTensor rating matrix, of dense_shape [N, M]
+    user_embeddings: A dense Tensor U of shape [N, k] where k is the embedding
+      dimension, such that U_i is the embedding of user i.
+    movie_embeddings: A dense Tensor V of shape [M, k] where k is the embedding
+      dimension, such that V_j is the embedding of movie j.
+  Returns:
+    A scalar Tensor representing the MSE between the true ratings and the
+      model's predictions.
+  """
+  predictions = tf.gather_nd(
+      tf.matmul(user_embeddings, movie_embeddings, transpose_b=True),         	# u*v로 원행렬과 비슷한 행렬을 만들고 
+      sparse_ratings.indices)
+  loss = tf.losses.mean_squared_error(sparse_ratings.values, predictions)	# MSE  
+  return loss
 
